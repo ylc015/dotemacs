@@ -53,6 +53,21 @@
 ;; disable menu bar
 ( menu-bar-mode -1 )
 
+;; custom function
+(defun package-reinstall-all-activated-packages ()
+  "Refresh and reinstall all activated packages."
+  (interactive)
+  (package-refresh-contents)
+  (dolist (package-name package-activated-list)
+    (when (package-installed-p package-name)
+      (unless (ignore-errors                   ;some packages may fail to install
+                (package-reinstall package-name))
+        (warn "Package %s failed to reinstall" package-name)))))
+
+
+;; treat - and _ as part of the word in python mode
+(modify-syntax-entry ?_ "w" python-mode-syntax-table)
+(modify-syntax-entry ?- "w" python-mode-syntax-table)
 
 (use-package spacemacs-theme
     :defer t
@@ -75,7 +90,8 @@
 (require 'evil-mc)
 (require 'evil-multiedit)
 
-
+(require 'deadgrep)
+(global-set-key (kbd "<f5>") #'deadgrep)
 
 ;; Org-mode: custom timestamp
 (setq-default org-display-custom-times t)
@@ -86,7 +102,7 @@
       '((sequence "TODO" "WAITING" "BLOCKED" "VERIFIED" "|" "DONE" "DELEGATED")))
 
 ;; Enable yas-minor-mode only in org-mode
-(add-hook 'org-mode-hook 'yas-mino-mode-on)
+(add-hook 'org-mode-hook 'yas-minor-mode-on)
 ;; Enable yas global ly
 (yas-global-mode)
 ;; enable org bullet by default
@@ -102,6 +118,7 @@
 
 ;; Enabled Python mode in aurora configs
 (add-to-list 'auto-mode-alist '("\\.aurora\\'" . python-mode))
+(add-to-list 'auto-mode-alist '("BUILD" . python-mode))
 
 (require 'json-mode)
 (add-to-list 'auto-mode-alist '("\\.workflow\\'" . json-mode))
@@ -158,11 +175,43 @@
 
 (defun edit-journal-note ()
   (interactive)
-  (find-file "~/workspace/notes/journal.org"))
+  (find-file "~/Dropbox/org/inbox.org"))
 
 (defun toggle-buffers ()
   (interactive)
   (switch-to-buffer nil))
+
+;; org roam setup
+(use-package org-roam
+      :ensure t
+      :hook
+      (after-init . org-roam-mode)
+      :custom
+      (org-roam-directory "/Users/peterc/workspace/notes/org-roam/")
+      :bind (:map org-roam-mode-map
+              (("C-c n l" . org-roam)
+               ("C-c n f" . org-roam-find-file)
+               ("C-c n g" . org-roam-graph))
+              :map org-mode-map
+              (("C-c n i" . org-roam-insert))
+              (("C-c n r" . org-roam-db-build-cache))
+              (("C-c n I" . org-roam-insert-immediate))
+              (("C-c n d" . org-roam-dailies-map))))
+
+(use-package org-roam-server
+  :ensure t
+  :config
+  (setq org-roam-server-host "127.0.0.1"
+        org-roam-server-port 8135 ;; unconventional port number to avoid colision
+        org-roam-server-authenticate nil
+        org-roam-server-export-inline-images t
+        org-roam-server-serve-files nil
+        org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
+        org-roam-server-network-poll t
+        org-roam-server-network-arrows nil
+        org-roam-server-network-label-truncate t
+        org-roam-server-network-label-truncate-length 60
+        org-roam-server-network-label-wrap-length 20))
 
 ;; Make evil undo more like vim
 (setq evil-want-fine-undo t)
@@ -292,6 +341,8 @@
    "n" '(:ignore t :which-key "Notes")
    "ng" 'edit-general-note
    "nj" 'edit-journal-note
+   "nc" 'org-roam-dailies-capture-today
+   "nt" 'org-roam-dailies-today
    ))
 
 ;; Custom files
@@ -304,9 +355,10 @@
  ;; If there is more than one, they won't work right.
  '(fci-rule-color "#dedede")
  '(line-spacing 0.2)
+ '(org-agenda-files (quote ("~/Dropbox/org/inbox.org")))
  '(package-selected-packages
    (quote
-    (org-ql poet-theme evil-mc yasnippet-snippets evil-surround yaml-mode ammonite-term-repl company-lsp yasnippet lsp-ui lsp-metals lsp-mode flycheck sbt-mode scala-mode ranger persp-projectile counsel-projectile projectile butler jenkins undo-fu undo-tree swiper-helm counsel spacemacs-theme magit use-package))))
+    (deadgrep highlight-symbol org-roam-server org org-roam org-ql poet-theme evil-mc yasnippet-snippets evil-surround yaml-mode ammonite-term-repl company-lsp yasnippet lsp-ui lsp-metals lsp-mode flycheck sbt-mode scala-mode ranger persp-projectile counsel-projectile projectile butler jenkins undo-fu undo-tree swiper-helm counsel spacemacs-theme magit use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

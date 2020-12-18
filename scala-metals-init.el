@@ -33,8 +33,8 @@
 
 (use-package lsp-mode
   ;; Optional - enable lsp-mode automatically in scala files
-  :hook  (scala-mode . lsp)
-         (lsp-mode . lsp-lens-mode)
+  ;;:hook  (scala-mode . lsp)  Disabled because of crazy load time
+  :hook (lsp-mode . lsp-lens-mode)
   :config (setq lsp-prefer-flymake nil))
 
 ;; Add metals backend for lsp-mode
