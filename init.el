@@ -65,7 +65,15 @@
         (warn "Package %s failed to reinstall" package-name)))))
 
 
+
+(defun org-time-stamp-inactive-with-time ()
+  "function to do inactive time stamp with time. this avoid colision with evil's C-u settings"
+  (interactive)
+  (org-time-stamp-inactive (current-time))
+  )
+
 ;; treat - and _ as part of the word in python mode
+(require 'python)
 (modify-syntax-entry ?_ "w" python-mode-syntax-table)
 (modify-syntax-entry ?- "w" python-mode-syntax-table)
 
@@ -213,6 +221,7 @@
         org-roam-server-network-label-truncate-length 60
         org-roam-server-network-label-wrap-length 20))
 
+
 ;; Make evil undo more like vim
 (setq evil-want-fine-undo t)
 
@@ -292,7 +301,7 @@
 
    "o" '(:ignore t :which-key "Org Mode")
    "oa" 'org-agenda
-   "ot" 'org-time-stamp-inactive
+   "ot" 'org-time-stamp-inactive-with-time
 
    "e" '(:ignore t :which-key "Eval")
    "eb" 'eval-buffer
