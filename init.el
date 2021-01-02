@@ -109,8 +109,19 @@
 (setq org-todo-keywords
       '((sequence "TODO" "WAITING" "BLOCKED" "VERIFIED" "|" "DONE" "DELEGATED")))
 
+;; Org mode: hide emphasis character like *bold*
+(setq org-hide-emphasis-markers t)
+
+;; set bold text to be more obvious
+(set-face-attribute 'bold nil :height 240)
+
+;; turn on yas-wrap-around-region, it will inject value in $0 to the snipet
+(setq yas-wrap-around-region t)
+
 ;; Enable yas-minor-mode only in org-mode
 (add-hook 'org-mode-hook 'yas-minor-mode-on)
+;; Enable evil org mode in org-mode
+(add-hook 'org-mode-hook 'evil-org-mode)
 ;; Enable yas global ly
 (yas-global-mode)
 ;; enable org bullet by default
@@ -301,7 +312,7 @@
 
    "o" '(:ignore t :which-key "Org Mode")
    "oa" 'org-agenda
-   "ot" 'org-time-stamp-inactive-with-time
+   "oi" 'org-time-stamp-inactive-with-time
 
    "e" '(:ignore t :which-key "Eval")
    "eb" 'eval-buffer
@@ -367,7 +378,7 @@
  '(org-agenda-files (quote ("~/Dropbox/org/inbox.org")))
  '(package-selected-packages
    (quote
-    (deadgrep highlight-symbol org-roam-server org org-roam org-ql poet-theme evil-mc yasnippet-snippets evil-surround yaml-mode ammonite-term-repl company-lsp yasnippet lsp-ui lsp-metals lsp-mode flycheck sbt-mode scala-mode ranger persp-projectile counsel-projectile projectile butler jenkins undo-fu undo-tree swiper-helm counsel spacemacs-theme magit use-package))))
+    (writegood-mode ox-pandoc chronos rust-mode evil-org deadgrep highlight-symbol org-roam-server org org-roam org-ql poet-theme evil-mc yasnippet-snippets evil-surround yaml-mode ammonite-term-repl company-lsp yasnippet lsp-ui lsp-metals lsp-mode flycheck sbt-mode scala-mode ranger persp-projectile counsel-projectile projectile butler jenkins undo-fu undo-tree swiper-helm counsel spacemacs-theme magit use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
