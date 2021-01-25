@@ -81,6 +81,7 @@
     :defer t
     :init (load-theme 'spacemacs-dark t))
 
+
 ;; Which Key
 (use-package which-key
   :ensure t
@@ -101,9 +102,19 @@
 (require 'deadgrep)
 (global-set-key (kbd "<f5>") #'deadgrep)
 
+;; Org mode: special highlight for bold text
+(setq org-emphasis-alist
+  '(("*" (bold :foreground "Orange" ))
+    ("/" italic)
+    ("_" underline)
+    ("=" (:background "maroon" :foreground "white"))
+    ("~" (:background "deep sky blue" :foreground "MidnightBlue"))
+    ("+" (:strike-through t))))
+
 ;; Org-mode: custom timestamp
 (setq-default org-display-custom-times t)
 (setq org-time-stamp-custom-formats '("<%a %b %e %Y>" . "<%a %b %e %Y %H:%M>"))
+
 
 ;; Org mode: Todo states
 (setq org-todo-keywords
@@ -146,6 +157,9 @@
   :ensure t
   :config
   (global-evil-surround-mode 1))
+;; emmet mode for html expansion
+(require 'emmet-mode)
+(add-to-list 'auto-mode-alist '("\\.html\\'" . emmet-mode))
 
 ;; Code commenting
 (use-package evil-nerd-commenter :ensure t)
@@ -236,6 +250,9 @@
 ;; Make evil undo more like vim
 (setq evil-want-fine-undo t)
 
+;; set global highlight current line
+(global-hl-line-mode 1)
+
 ;; enable evil search to look for symbols
 ;; local buffer only
 (setq evil-symbol-word-search t)
@@ -265,7 +282,7 @@
   (general-define-key
    :states '(insert)
    "TAB" 'company-complete)
-  ;; Enable table expansion in org-mode
+   ;; Enable table expansion in org-mode
   (general-define-key
    :states '(insert)
    :keymaps 'org-mode-map
@@ -368,6 +385,7 @@
 ;; Custom files
 (load-file "~/.emacs.d/scala-metals-init.el")
 (load-file "~/.emacs.d/bloop.el")
+(load-file "~/.emacs.d/misc_functions.el")
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -378,7 +396,7 @@
  '(org-agenda-files (quote ("~/Dropbox/org/inbox.org")))
  '(package-selected-packages
    (quote
-    (writegood-mode ox-pandoc chronos rust-mode evil-org deadgrep highlight-symbol org-roam-server org org-roam org-ql poet-theme evil-mc yasnippet-snippets evil-surround yaml-mode ammonite-term-repl company-lsp yasnippet lsp-ui lsp-metals lsp-mode flycheck sbt-mode scala-mode ranger persp-projectile counsel-projectile projectile butler jenkins undo-fu undo-tree swiper-helm counsel spacemacs-theme magit use-package))))
+    (chronos rust-mode evil-org deadgrep highlight-symbol org-roam-server org org-roam org-ql poet-theme evil-mc yasnippet-snippets evil-surround yaml-mode ammonite-term-repl company-lsp yasnippet lsp-ui lsp-metals lsp-mode flycheck sbt-mode scala-mode ranger persp-projectile counsel-projectile projectile butler jenkins undo-fu undo-tree swiper-helm counsel spacemacs-theme magit use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
