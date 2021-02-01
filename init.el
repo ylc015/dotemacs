@@ -76,6 +76,11 @@
 (require 'python)
 (modify-syntax-entry ?_ "w" python-mode-syntax-table)
 (modify-syntax-entry ?- "w" python-mode-syntax-table)
+;; Python Hook
+(add-hook 'python-mode-hook
+(function (lambda ()
+	    (setq indent-tabs-mode nil
+		tab-width 2))))
 
 (use-package spacemacs-theme
     :defer t
@@ -118,7 +123,7 @@
 
 ;; Org mode: Todo states
 (setq org-todo-keywords
-      '((sequence "TODO" "WAITING" "BLOCKED" "VERIFIED" "|" "DONE" "DELEGATED")))
+      '((sequence "TODO" "WAITING" "BLOCKED" "MERGED" "VERIFIED" "|" "DONE" "DELEGATED")))
 
 ;; Org mode: hide emphasis character like *bold*
 (setq org-hide-emphasis-markers t)
@@ -132,7 +137,13 @@
 ;; Enable yas-minor-mode only in org-mode
 (add-hook 'org-mode-hook 'yas-minor-mode-on)
 ;; Enable evil org mode in org-mode
-(add-hook 'org-mode-hook 'evil-org-mode)
+(use-package evil-org
+  :ensure t
+  :after org
+  :hook (org-mode . (lambda () evil-org-mode))
+  :config
+  (require 'evil-org-agenda)
+  (evil-org-agenda-set-keys))
 ;; Enable yas global ly
 (yas-global-mode)
 ;; enable org bullet by default
@@ -197,6 +208,10 @@
 (use-package persp-projectile
   :ensure t)
 
+;; jq-mode
+(with-eval-after-load "json-mode"
+  (define-key json-mode-map (kbd "C-c C-j") #'jq-interactively))
+
 ;; Edit this config
 (defun edit-emacs-configuration ()
   (interactive)
@@ -204,11 +219,15 @@
 
 (defun edit-general-note ()
   (interactive)
-  (find-file "~/workspace/notes/general.org"))
+  (find-file "/Volumes/Private/notes/general.org"))
 
 (defun edit-journal-note ()
   (interactive)
   (find-file "~/Dropbox/org/inbox.org"))
+
+(defun edit-private-journal-note ()
+  (interactive)
+  (find-file "~/Dropbox/org/privateJournal.org"))
 
 (defun toggle-buffers ()
   (interactive)
@@ -220,7 +239,7 @@
       :hook
       (after-init . org-roam-mode)
       :custom
-      (org-roam-directory "/Users/peterc/workspace/notes/org-roam/")
+      (org-roam-directory "/Volumes/Private/notes/org-roam/")
       :bind (:map org-roam-mode-map
               (("C-c n l" . org-roam)
                ("C-c n f" . org-roam-find-file)
@@ -356,6 +375,7 @@
    "sl" 'ivy-resume
    "sr" 'query-replace-regexp
    "sa" 'avy-goto-word-or-subword-1
+   "sb" 'counsel-bookmark
 
    "t" '(:ignore t :which-key "Toggles")
    "tn" 'display-line-numbers-mode
@@ -378,6 +398,8 @@
    "n" '(:ignore t :which-key "Notes")
    "ng" 'edit-general-note
    "nj" 'edit-journal-note
+   "np" 'edit-private-journal-note
+   
    "nc" 'org-roam-dailies-capture-today
    "nt" 'org-roam-dailies-today
    ))
@@ -396,7 +418,8 @@
  '(org-agenda-files (quote ("~/Dropbox/org/inbox.org")))
  '(package-selected-packages
    (quote
-    (chronos rust-mode evil-org deadgrep highlight-symbol org-roam-server org org-roam org-ql poet-theme evil-mc yasnippet-snippets evil-surround yaml-mode ammonite-term-repl company-lsp yasnippet lsp-ui lsp-metals lsp-mode flycheck sbt-mode scala-mode ranger persp-projectile counsel-projectile projectile butler jenkins undo-fu undo-tree swiper-helm counsel spacemacs-theme magit use-package))))
+    (py-autopep8 python-black org-drill jq-mode chronos rust-mode evil-org deadgrep highlight-symbol org-roam-server org org-roam org-ql poet-theme evil-mc yasnippet-snippets evil-surround yaml-mode ammonite-term-repl company-lsp yasnippet lsp-ui lsp-metals lsp-mode flycheck sbt-mode scala-mode ranger persp-projectile counsel-projectile projectile butler jenkins undo-fu undo-tree swiper-helm counsel spacemacs-theme magit use-package)))
+ '(xclip-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
