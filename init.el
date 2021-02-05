@@ -65,13 +65,6 @@
         (warn "Package %s failed to reinstall" package-name)))))
 
 
-
-(defun org-time-stamp-inactive-with-time ()
-  "function to do inactive time stamp with time. this avoid colision with evil's C-u settings"
-  (interactive)
-  (org-time-stamp-inactive (current-time))
-  )
-
 ;; treat - and _ as part of the word in python mode
 (require 'python)
 (modify-syntax-entry ?_ "w" python-mode-syntax-table)
@@ -107,26 +100,6 @@
 (require 'deadgrep)
 (global-set-key (kbd "<f5>") #'deadgrep)
 
-;; Org mode: special highlight for bold text
-(setq org-emphasis-alist
-  '(("*" (bold :foreground "Orange" ))
-    ("/" italic)
-    ("_" underline)
-    ("=" (:background "maroon" :foreground "white"))
-    ("~" (:background "deep sky blue" :foreground "MidnightBlue"))
-    ("+" (:strike-through t))))
-
-;; Org-mode: custom timestamp
-(setq-default org-display-custom-times t)
-(setq org-time-stamp-custom-formats '("<%a %b %e %Y>" . "<%a %b %e %Y %H:%M>"))
-
-
-;; Org mode: Todo states
-(setq org-todo-keywords
-      '((sequence "TODO" "WAITING" "BLOCKED" "MERGED" "VERIFIED" "|" "DONE" "DELEGATED")))
-
-;; Org mode: hide emphasis character like *bold*
-(setq org-hide-emphasis-markers t)
 
 ;; set bold text to be more obvious
 (set-face-attribute 'bold nil :height 240)
@@ -232,39 +205,6 @@
 (defun toggle-buffers ()
   (interactive)
   (switch-to-buffer nil))
-
-;; org roam setup
-(use-package org-roam
-      :ensure t
-      :hook
-      (after-init . org-roam-mode)
-      :custom
-      (org-roam-directory "/Volumes/Private/notes/org-roam/")
-      :bind (:map org-roam-mode-map
-              (("C-c n l" . org-roam)
-               ("C-c n f" . org-roam-find-file)
-               ("C-c n g" . org-roam-graph))
-              :map org-mode-map
-              (("C-c n i" . org-roam-insert))
-              (("C-c n r" . org-roam-db-build-cache))
-              (("C-c n I" . org-roam-insert-immediate))
-              (("C-c n d" . org-roam-dailies-map))))
-
-(use-package org-roam-server
-  :ensure t
-  :config
-  (setq org-roam-server-host "127.0.0.1"
-        org-roam-server-port 8135 ;; unconventional port number to avoid colision
-        org-roam-server-authenticate nil
-        org-roam-server-export-inline-images t
-        org-roam-server-serve-files nil
-        org-roam-server-served-file-extensions '("pdf" "mp4" "ogv")
-        org-roam-server-network-poll t
-        org-roam-server-network-arrows nil
-        org-roam-server-network-label-truncate t
-        org-roam-server-network-label-truncate-length 60
-        org-roam-server-network-label-wrap-length 20))
-
 
 ;; Make evil undo more like vim
 (setq evil-want-fine-undo t)
@@ -408,6 +348,7 @@
 (load-file "~/.emacs.d/scala-metals-init.el")
 (load-file "~/.emacs.d/bloop.el")
 (load-file "~/.emacs.d/misc_functions.el")
+(load-file "~/.emacs.d/org-settings.el")
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -415,10 +356,10 @@
  ;; If there is more than one, they won't work right.
  '(fci-rule-color "#dedede")
  '(line-spacing 0.2)
- '(org-agenda-files (quote ("~/Dropbox/org/inbox.org")))
+ '(org-agenda-files (quote ("~/Dropbox/org/inbox.org" "/Volumes/Private/notes/")))
  '(package-selected-packages
    (quote
-    (py-autopep8 python-black org-drill jq-mode chronos rust-mode evil-org deadgrep highlight-symbol org-roam-server org org-roam org-ql poet-theme evil-mc yasnippet-snippets evil-surround yaml-mode ammonite-term-repl company-lsp yasnippet lsp-ui lsp-metals lsp-mode flycheck sbt-mode scala-mode ranger persp-projectile counsel-projectile projectile butler jenkins undo-fu undo-tree swiper-helm counsel spacemacs-theme magit use-package)))
+    (ox-jira py-autopep8 python-black org-drill jq-mode chronos rust-mode evil-org deadgrep highlight-symbol org-roam-server org org-roam org-ql poet-theme evil-mc yasnippet-snippets evil-surround yaml-mode ammonite-term-repl company-lsp yasnippet lsp-ui lsp-metals lsp-mode flycheck sbt-mode scala-mode ranger persp-projectile counsel-projectile projectile butler jenkins undo-fu undo-tree swiper-helm counsel spacemacs-theme magit use-package)))
  '(xclip-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
