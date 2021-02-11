@@ -356,7 +356,6 @@
  ;; If there is more than one, they won't work right.
  '(fci-rule-color "#dedede")
  '(line-spacing 0.2)
- '(org-agenda-files (quote ("~/Dropbox/org/inbox.org" "/Volumes/Private/notes/")))
  '(package-selected-packages
    (quote
     (ox-jira py-autopep8 python-black org-drill jq-mode chronos rust-mode evil-org deadgrep highlight-symbol org-roam-server org org-roam org-ql poet-theme evil-mc yasnippet-snippets evil-surround yaml-mode ammonite-term-repl company-lsp yasnippet lsp-ui lsp-metals lsp-mode flycheck sbt-mode scala-mode ranger persp-projectile counsel-projectile projectile butler jenkins undo-fu undo-tree swiper-helm counsel spacemacs-theme magit use-package)))

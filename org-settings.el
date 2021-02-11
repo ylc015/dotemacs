@@ -1,3 +1,6 @@
+;; add your TODO list to this variable so that it would show up on global TODO
+'(org-agenda-files (quote ("~/Dropbox/org/inbox.org" "/Volumes/Private/notes/")))
+
 ;; org roam setup. a note taking system
 (use-package org-roam
       :ensure t
@@ -99,8 +102,9 @@ PRIORITY may be one of the characters ?A, ?B, or ?C."
  '((dot . t))) ; this line activates dot
 
 ;; org mode custom backend to ignore links when export
-(defun my-ox-jira-link (link desc info) desc)
-(org-export-define-derived-backend 'my-jira 'jira
-    :menu-entry
-     '(?J "Export to Jira without links" (lambda (a s v b) (ox-jira-export-as-jira a s v)))
-    :translate-alist '((link . my-ox-jira-link)))
+;;(defun my-ox-jira-link (link desc info) desc)
+;;    (org-export-define-derived-backend 'my-jira 'jira
+;;	:menu-entry
+;;	'(?J "Export to Jira without links" (lambda (a s v b) (ox-jira-export-as-jira a s v)))
+;;	:translate-alist '((link . my-ox-jira-link)))
+
