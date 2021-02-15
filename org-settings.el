@@ -1,5 +1,5 @@
 ;; add your TODO list to this variable so that it would show up on global TODO
-'(org-agenda-files (quote ("~/Dropbox/org/inbox.org" "/Volumes/Private/notes/")))
+(setq org-agenda-files (quote ("~/Dropbox/org/inbox.org" "/Volumes/Private/notes/")))
 
 ;; org roam setup. a note taking system
 (use-package org-roam
@@ -52,8 +52,8 @@
     ("+" (:strike-through t))))
 
 ;; Org-mode: custom timestamp
-(setq-default org-display-custom-times t)
-(setq org-time-stamp-custom-formats '("<%a %b %e %Y>" . "<%a %b %e %Y %H:%M>"))
+;;(setq-default org-display-custom-times t)
+;;(setq org-time-stamp-custom-formats '("<%a %b %e %Y>" . "<%a %b %e %Y %H:%M>"))
 
 
 ;; Org mode: Todo states
@@ -108,3 +108,10 @@ PRIORITY may be one of the characters ?A, ?B, or ?C."
 ;;	'(?J "Export to Jira without links" (lambda (a s v b) (ox-jira-export-as-jira a s v)))
 ;;	:translate-alist '((link . my-ox-jira-link)))
 
+
+;; Open agenda vertically by default
+(defadvice org-agenda (around split-vertically activate)
+  (let (
+    (split-width-threshold 30)    ; or whatever width makes sense for you
+    (split-height-threshold nil)) ; but never horizontally
+ad-do-it))

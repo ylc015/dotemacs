@@ -22,8 +22,20 @@
  
 
 (add-to-list 'load-path "~/.emacs.d/evil")
-(require 'evil)
-(evil-mode 1)
+;; special tunning for evil collection. which enable evil binding in special mode like help page and edebug
+(use-package evil
+  :ensure t
+  :init
+  (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
+  (setq evil-want-keybinding nil)
+  :config
+  (evil-mode 1))
+
+(use-package evil-collection
+  :after evil
+  :ensure t
+  :config
+  (evil-collection-init))
 
 ;; make modeline changes color depending on evil state
 (setq original-background (face-attribute 'mode-line :background))
@@ -134,6 +146,9 @@
 (add-to-list 'auto-mode-alist '("\\.aurora\\'" . python-mode))
 (add-to-list 'auto-mode-alist '("BUILD" . python-mode))
 
+;; Enable lispyville whenever lispy mode is on
+(add-hook 'lispy-mode-hook #'lispyville-mode)
+
 (require 'json-mode)
 (add-to-list 'auto-mode-alist '("\\.workflow\\'" . json-mode))
 
@@ -198,6 +213,14 @@
   (interactive)
   (find-file "~/Dropbox/org/inbox.org"))
 
+(defun open-my-journal-workplace ()
+  ;; opens inbox.org and open agenda view by default
+  (interactive)
+  (edit-journal-note)
+  (call-custom-agenda-view)
+  (other-window 1)
+  )
+
 (defun edit-private-journal-note ()
   (interactive)
   (find-file "~/Dropbox/org/privateJournal.org"))
@@ -211,6 +234,12 @@
 
 ;; set global highlight current line
 (global-hl-line-mode 1)
+
+(defun call-custom-agenda-view ()
+  ;; Call direct custom agenda view
+  ;; see org-setting.el for the custom view
+  (interactive)
+  (org-agenda nil "d"))
 
 ;; enable evil search to look for symbols
 ;; local buffer only
@@ -287,7 +316,7 @@
    "la" 'lsp-execute-code-action
 
    "o" '(:ignore t :which-key "Org Mode")
-   "oa" 'org-agenda
+   "oa" 'call-custom-agenda-view
    "oi" 'org-time-stamp-inactive-with-time
 
    "e" '(:ignore t :which-key "Eval")
@@ -337,7 +366,8 @@
 
    "n" '(:ignore t :which-key "Notes")
    "ng" 'edit-general-note
-   "nj" 'edit-journal-note
+   ;;"nj" 'edit-journal-note
+   "nj" 'open-my-journal-workplace
    "np" 'edit-private-journal-note
    
    "nc" 'org-roam-dailies-capture-today
@@ -358,7 +388,7 @@
  '(line-spacing 0.2)
  '(package-selected-packages
    (quote
-    (ox-jira py-autopep8 python-black org-drill jq-mode chronos rust-mode evil-org deadgrep highlight-symbol org-roam-server org org-roam org-ql poet-theme evil-mc yasnippet-snippets evil-surround yaml-mode ammonite-term-repl company-lsp yasnippet lsp-ui lsp-metals lsp-mode flycheck sbt-mode scala-mode ranger persp-projectile counsel-projectile projectile butler jenkins undo-fu undo-tree swiper-helm counsel spacemacs-theme magit use-package)))
+    (evil-collection ox-jira py-autopep8 python-black org-drill jq-mode chronos rust-mode evil-org deadgrep highlight-symbol org-roam-server org org-roam org-ql poet-theme evil-mc yasnippet-snippets evil-surround yaml-mode ammonite-term-repl company-lsp yasnippet lsp-ui lsp-metals lsp-mode flycheck sbt-mode scala-mode ranger persp-projectile counsel-projectile projectile butler jenkins undo-fu undo-tree swiper-helm counsel spacemacs-theme magit use-package)))
  '(xclip-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -366,3 +396,4 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+(put 'upcase-region 'disabled nil)
