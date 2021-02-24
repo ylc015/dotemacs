@@ -1,11 +1,15 @@
 ;; add your TODO list to this variable so that it would show up on global TODO
 (setq org-agenda-files (quote ("~/Dropbox/org/inbox.org" "/Volumes/Private/notes/")))
 
+;; set org roam backend. allows for fuzzy search of file
+(setq org-roam-completion-system 'ivy)
+
 ;; org roam setup. a note taking system
 (use-package org-roam
       :ensure t
       :hook
-      (after-init . org-roam-mode)
+      ((after-init . org-roam-mode)
+       (org-mode . (lambda () evil-org-mode)))
       :custom
       (org-roam-directory "/Volumes/Private/notes/org-roam/")
       :bind (:map org-roam-mode-map

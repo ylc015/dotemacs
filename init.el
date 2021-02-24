@@ -86,6 +86,11 @@
 (function (lambda ()
 	    (setq indent-tabs-mode nil
 		tab-width 2))))
+(add-hook 'python-mode-hook
+	  '(lambda () 
+		(setq python-indent 2)
+		(setq evil-shift-width 2)
+		))
 
 (use-package spacemacs-theme
     :defer t
@@ -272,7 +277,7 @@
    "TAB" 'company-complete)
    ;; Enable table expansion in org-mode
   (general-define-key
-   :states '(insert)
+   :states '(normal insert visual)
    :keymaps 'org-mode-map
    "TAB" 'org-cycle)
   (general-define-key
@@ -389,6 +394,7 @@
  '(package-selected-packages
    (quote
     (evil-collection ox-jira py-autopep8 python-black org-drill jq-mode chronos rust-mode evil-org deadgrep highlight-symbol org-roam-server org org-roam org-ql poet-theme evil-mc yasnippet-snippets evil-surround yaml-mode ammonite-term-repl company-lsp yasnippet lsp-ui lsp-metals lsp-mode flycheck sbt-mode scala-mode ranger persp-projectile counsel-projectile projectile butler jenkins undo-fu undo-tree swiper-helm counsel spacemacs-theme magit use-package)))
+ '(show-paren-mode t)
  '(xclip-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
