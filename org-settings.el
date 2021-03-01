@@ -1,8 +1,37 @@
 ;; add your TODO list to this variable so that it would show up on global TODO
 (setq org-agenda-files (quote ("~/Dropbox/org/inbox.org" "/Volumes/Private/notes/")))
 
-;; set org roam backend. allows for fuzzy search of file
+(add-to-list 'load-path "~/.emacs.d/elpa/org-9.4/org-protocol.el")
+(require 'org-protocol)
+(require 'org-capture)
+
+;; SET org roam backend. allows for fuzzy search of file
 (setq org-roam-completion-system 'ivy)
+
+;; set org capture default file
+(setq org-default-notes-file "~/Dropbox/org/inbox.org")
+;; (require 'org-protocol)
+ 
+;; function used by org-protocol chrome extension to santitize link
+;; (defun transform-square-brackets-to-round-ones(string-to-transform)
+;;   "Transforms [ into ( and ] into ), other chars left unchanged."
+;;   (concat 
+;;   (mapca
+;;   r #'(lambda (c) (if (equal c ?[) ?\( (if (equal c ?]) ?\) c))) string-to-transform))
+;;   )
+
+;; ORG capture templates
+(setq org-capture-templates
+      '(("t" "Work TODO Task"  entry (file org-default-notes-file)
+	 "* TODO %?\n %U" :empty-lines 1)
+	("T" "Work TODO with Clipboard" entry (file org-default-notes-file)
+	    "* TODO %?\n%U\n   %c" :empty-lines 1)
+	("p" "Protocol" entry (file+headline ,(file org-default-notes-file) "Inbox")
+        "* %^{Title}\nSource: %u, %c\n #+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n\n%?")
+	("L" "Protocol Link" entry (file+headline ,(file org-default-notes-filej) "Inbox")
+        "* %? [[%:link][%:description]] \nCaptured On: %U")
+    ))
+
 
 ;; org roam setup. a note taking system
 (use-package org-roam
