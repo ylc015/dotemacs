@@ -5,6 +5,9 @@
 (require 'org-protocol)
 (require 'org-capture)
 
+;; set archive location. mind the double colon at the end
+(setq org-archive-location "/Volumes/Private/notes/archive.org::") 
+
 ;; SET org roam backend. allows for fuzzy search of file
 (setq org-roam-completion-system 'ivy)
 
@@ -26,6 +29,7 @@
 	 "* TODO %?\n %U" :empty-lines 1)
 	("T" "Work TODO with Clipboard" entry (file org-default-notes-file)
 	    "* TODO %?\n%U\n   %c" :empty-lines 1)
+	("K" "Knowledge with Clipboard" entry (file "/Volumes/Private/notes/knowledge.org") "* %?\n%U\n   %c" :empty-lines 1)
 	("p" "Protocol" entry (file+headline ,(file org-default-notes-file) "Inbox")
         "* %^{Title}\nSource: %u, %c\n #+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n\n%?")
 	("L" "Protocol Link" entry (file+headline ,(file org-default-notes-filej) "Inbox")

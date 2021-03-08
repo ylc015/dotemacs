@@ -19,6 +19,9 @@
 ;; and `package-pinned-packages`. Most users will not need or want to do this.
 ;;(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 (package-initialize)
+
+;; jira settings
+(setq jiralib-url "https://jira.twitter.biz")
  
 
 (add-to-list 'load-path "~/.emacs.d/evil")
@@ -218,6 +221,10 @@
   (interactive)
   (find-file "~/Dropbox/org/inbox.org"))
 
+(defun edit-knowlege-note ()
+  (interactive)
+  (find-file "/Volumes/Private/notes/knowledge.org"))
+
 (defun open-my-journal-workplace ()
   ;; opens inbox.org and open agenda view by default
   (interactive)
@@ -323,6 +330,7 @@
    "o" '(:ignore t :which-key "Org Mode")
    "oa" 'call-custom-agenda-view
    "oi" 'org-time-stamp-inactive-with-time
+   "oc" 'org-capture
 
    "e" '(:ignore t :which-key "Eval")
    "eb" 'eval-buffer
@@ -374,6 +382,7 @@
    ;;"nj" 'edit-journal-note
    "nj" 'open-my-journal-workplace
    "np" 'edit-private-journal-note
+   "nk" 'edit-knowlege-note
    
    "nc" 'org-roam-dailies-capture-today
    "nt" 'org-roam-dailies-today
@@ -391,9 +400,23 @@
  ;; If there is more than one, they won't work right.
  '(fci-rule-color "#dedede")
  '(line-spacing 0.2)
+ '(org-mode-hook
+   (quote
+    (#[0 "\300\301\302\303\304$\207"
+	 [add-hook change-major-mode-hook org-show-all append local]
+	 5]
+     #[0 "\300\301\302\303\304$\207"
+	 [add-hook change-major-mode-hook org-babel-show-result-all append local]
+	 5]
+     org-babel-result-hide-spec org-babel-hide-all-hashes
+     #[0 "\301\211\207"
+	 [imenu-create-index-function org-imenu-get-tree]
+	 2]
+     (lambda nil evil-org-mode)
+     org-bullets-mode yas-minor-mode-on evil-org-mode)))
  '(package-selected-packages
    (quote
-    (evil-collection ox-jira py-autopep8 python-black org-drill jq-mode chronos rust-mode evil-org deadgrep highlight-symbol org-roam-server org org-roam org-ql poet-theme evil-mc yasnippet-snippets evil-surround yaml-mode ammonite-term-repl company-lsp yasnippet lsp-ui lsp-metals lsp-mode flycheck sbt-mode scala-mode ranger persp-projectile counsel-projectile projectile butler jenkins undo-fu undo-tree swiper-helm counsel spacemacs-theme magit use-package)))
+    (org-re-reveal hackernews org-jira evil-collection ox-jira py-autopep8 python-black org-drill jq-mode chronos rust-mode evil-org deadgrep highlight-symbol org-roam-server org org-roam org-ql poet-theme evil-mc yasnippet-snippets evil-surround yaml-mode ammonite-term-repl company-lsp yasnippet lsp-ui lsp-metals lsp-mode flycheck sbt-mode scala-mode ranger persp-projectile counsel-projectile projectile butler jenkins undo-fu undo-tree swiper-helm counsel spacemacs-theme magit use-package)))
  '(show-paren-mode t)
  '(xclip-mode t))
 (custom-set-faces
