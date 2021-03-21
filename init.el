@@ -154,6 +154,9 @@
 (add-to-list 'auto-mode-alist '("\\.aurora\\'" . python-mode))
 (add-to-list 'auto-mode-alist '("BUILD" . python-mode))
 
+;; Sh mode hook
+(add-to-list 'auto-mode-alist '(".bash_alias" . sh-mode))
+
 ;; Enable lispyville whenever lispy mode is on
 (add-hook 'lispy-mode-hook #'lispyville-mode)
 
@@ -167,6 +170,9 @@
 ;; emmet mode for html expansion
 (require 'emmet-mode)
 (add-to-list 'auto-mode-alist '("\\.html\\'" . emmet-mode))
+
+;; undo region enabled!!! select a region and undo from there
+(setq undo-tree-enable-undo-in-region t)
 
 ;; Code commenting
 (use-package evil-nerd-commenter :ensure t)
@@ -346,6 +352,8 @@
    "wx"  'delete-window
    "wa"  'ace-window
 
+   "l" '(:ignore t :which-key "link")
+   "ll" 'goto-address-at-point
 
    "a" '(:ignore t :which-key "Applications")
    "ar" 'ranger
@@ -361,6 +369,7 @@
 
    "t" '(:ignore t :which-key "Toggles")
    "tn" 'display-line-numbers-mode
+   "tr" (lambda () (interactive) (display-line-numbers-mode 'relative))
    "tl" 'toggle-truncate-lines
    "tc" 'xclip-mode 
 
@@ -373,6 +382,8 @@
    "c" '(:ignore t :which-key "Code?")
    "cc" 'evilnc-comment-or-uncomment-lines
    "cm" 'evil-multiedit-match-all
+   "cn" 'flycheck-next-error
+   
 
    "g" '(:ignore t :which-key "Git")
    "gg" 'magit-status
@@ -416,7 +427,7 @@
      org-bullets-mode yas-minor-mode-on evil-org-mode)))
  '(package-selected-packages
    (quote
-    (org-re-reveal hackernews org-jira evil-collection ox-jira py-autopep8 python-black org-drill jq-mode chronos rust-mode evil-org deadgrep highlight-symbol org-roam-server org org-roam org-ql poet-theme evil-mc yasnippet-snippets evil-surround yaml-mode ammonite-term-repl company-lsp yasnippet lsp-ui lsp-metals lsp-mode flycheck sbt-mode scala-mode ranger persp-projectile counsel-projectile projectile butler jenkins undo-fu undo-tree swiper-helm counsel spacemacs-theme magit use-package)))
+    (pdf-tools stripes md4rd vterm ox-reveal org-re-reveal hackernews org-jira evil-collection ox-jira py-autopep8 python-black org-drill jq-mode chronos rust-mode evil-org deadgrep highlight-symbol org-roam-server org org-roam org-ql poet-theme evil-mc yasnippet-snippets evil-surround yaml-mode ammonite-term-repl company-lsp yasnippet lsp-ui lsp-metals lsp-mode flycheck sbt-mode scala-mode ranger persp-projectile counsel-projectile projectile butler jenkins undo-fu undo-tree swiper-helm counsel spacemacs-theme magit use-package)))
  '(show-paren-mode t)
  '(xclip-mode t))
 (custom-set-faces

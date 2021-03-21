@@ -5,6 +5,9 @@
 (require 'org-protocol)
 (require 'org-capture)
 
+;; org reveal. a presentation framework
+(setq org-reveal-root "file:///Users/peterc/perm_tmp/node_modules/reveal.js")
+
 ;; set archive location. mind the double colon at the end
 (setq org-archive-location "/Volumes/Private/notes/archive.org::") 
 
@@ -30,9 +33,9 @@
 	("T" "Work TODO with Clipboard" entry (file org-default-notes-file)
 	    "* TODO %?\n%U\n   %c" :empty-lines 1)
 	("K" "Knowledge with Clipboard" entry (file "/Volumes/Private/notes/knowledge.org") "* %?\n%U\n   %c" :empty-lines 1)
-	("p" "Protocol" entry (file+headline ,(file org-default-notes-file) "Inbox")
+	("p" "Protocol" entry (file org-default-notes-file)
         "* %^{Title}\nSource: %u, %c\n #+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n\n%?")
-	("L" "Protocol Link" entry (file+headline ,(file org-default-notes-filej) "Inbox")
+	("L" "Protocol Link" entry (file org-default-notes-file) 
         "* %? [[%:link][%:description]] \nCaptured On: %U")
     ))
 
@@ -152,3 +155,4 @@ PRIORITY may be one of the characters ?A, ?B, or ?C."
     (split-width-threshold 30)    ; or whatever width makes sense for you
     (split-height-threshold nil)) ; but never horizontally
 ad-do-it))
+
