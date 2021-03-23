@@ -120,9 +120,12 @@
 (require 'deadgrep)
 (global-set-key (kbd "<f5>") #'deadgrep)
 
+;; undo region enabled!!! select a region and undo from there
+(setq undo-tree-enable-undo-in-region t)
 
-;; set bold text to be more obvious
-(set-face-attribute 'bold nil :height 240)
+;; set bold text to be more obvious. becareful. this mess with headers too
+(set-face-attribute 'bold nil :height 170)
+(set-face-attribute 'default nil :height 150)
 
 ;; turn on yas-wrap-around-region, it will inject value in $0 to the snipet
 (setq yas-wrap-around-region t)
@@ -170,9 +173,6 @@
 ;; emmet mode for html expansion
 (require 'emmet-mode)
 (add-to-list 'auto-mode-alist '("\\.html\\'" . emmet-mode))
-
-;; undo region enabled!!! select a region and undo from there
-(setq undo-tree-enable-undo-in-region t)
 
 ;; Code commenting
 (use-package evil-nerd-commenter :ensure t)
@@ -427,7 +427,7 @@
      org-bullets-mode yas-minor-mode-on evil-org-mode)))
  '(package-selected-packages
    (quote
-    (pdf-tools stripes md4rd vterm ox-reveal org-re-reveal hackernews org-jira evil-collection ox-jira py-autopep8 python-black org-drill jq-mode chronos rust-mode evil-org deadgrep highlight-symbol org-roam-server org org-roam org-ql poet-theme evil-mc yasnippet-snippets evil-surround yaml-mode ammonite-term-repl company-lsp yasnippet lsp-ui lsp-metals lsp-mode flycheck sbt-mode scala-mode ranger persp-projectile counsel-projectile projectile butler jenkins undo-fu undo-tree swiper-helm counsel spacemacs-theme magit use-package)))
+    (org-noter neotree pdf-tools stripes md4rd vterm ox-reveal org-re-reveal hackernews org-jira evil-collection ox-jira py-autopep8 python-black org-drill jq-mode chronos rust-mode evil-org deadgrep highlight-symbol org-roam-server org org-roam org-ql poet-theme evil-mc yasnippet-snippets evil-surround yaml-mode ammonite-term-repl company-lsp yasnippet lsp-ui lsp-metals lsp-mode flycheck sbt-mode scala-mode ranger persp-projectile counsel-projectile projectile butler jenkins undo-fu undo-tree swiper-helm counsel spacemacs-theme magit use-package)))
  '(show-paren-mode t)
  '(xclip-mode t))
 (custom-set-faces
@@ -435,5 +435,5 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(hl-line ((t (:background "#212026")))))
 (put 'upcase-region 'disabled nil)
