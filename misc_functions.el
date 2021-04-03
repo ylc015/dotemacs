@@ -41,3 +41,11 @@
 	(split-string (buffer-substring start end)) ", ")))
     (delete-region start end)
     (insert insertion)))
+
+(defun peterc/kill-done-column ()
+  "Kill done column."
+  (interactive)
+  (while (re-search-forward "| d" nil t)
+    (replace-match "| " ))
+  )
+;;; misc_functions.el ends here

@@ -1,5 +1,5 @@
 ;; add your TODO list to this variable so that it would show up on global TODO
-(setq org-agenda-files (quote ("~/Dropbox/org/inbox.org" "/Volumes/Private/notes/")))
+(setq org-agenda-files (quote ("~/Dropbox/org/inbox.org" "~/Dropbox/org/privateJournal.org" "/Volumes/Private/notes/")))
 
 (add-to-list 'load-path "~/.emacs.d/elpa/org-9.4/org-protocol.el")
 (require 'org-protocol)
@@ -38,6 +38,16 @@
 	("L" "Protocol Link" entry (file org-default-notes-file) 
         "* %? [[%:link][%:description]] \nCaptured On: %U")
     ))
+
+;; org roam specific custom templates
+;; see https://orgmode.org/manual/Template-expansion.html for more template expansion macros
+(setq org-roam-capture-templates
+      '(("d" "default" plain (function org-roam--capture-get-point)
+	"%?"
+	:file-name "%<%Y%m%d%H%M%S>-${slug}"
+	:head "#+title: ${title}\n#+ROAM_TAGS: %^{ROAM_TAGS|default}\n\n* definition\n  %^{definition}"
+	:unnarrowed t)
+	))
 
 
 ;; org roam setup. a note taking system
@@ -155,4 +165,5 @@ PRIORITY may be one of the characters ?A, ?B, or ?C."
     (split-width-threshold 30)    ; or whatever width makes sense for you
     (split-height-threshold nil)) ; but never horizontally
 ad-do-it))
+
 

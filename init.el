@@ -95,6 +95,21 @@
 		(setq evil-shift-width 2)
 		))
 
+;; Configure flymake for Python
+(when (load "flymake" t)
+  (defun flymake-pylint-init ()
+    (let* ((temp-file (flymake-init-create-temp-buffer-copy
+                       'flymake-create-temp-inplace))
+           (local-file (file-relative-name
+                        temp-file
+                        (file-name-directory buffer-file-name))))
+      (list "epylint" (list local-file))))
+  (add-to-list 'flymake-allowed-file-name-masks
+               '("\\.py\\'" flymake-pylint-init)))
+
+;; Set as a minor mode for Python
+(add-hook 'python-mode-hook '(lambda () (flymake-mode)))
+
 (use-package spacemacs-theme
     :defer t
     :init (load-theme 'spacemacs-dark t))
@@ -337,7 +352,12 @@
    "oa" 'call-custom-agenda-view
    "oi" 'org-time-stamp-inactive-with-time
    "oc" 'org-capture
+   "od" 'org-roam-dailies-today
 
+   ;; beware that ideally these binding should be left hand only
+   "a" '(:ignore t :which-key "Artist Mode")
+   "aa" 'artist-mouse-choose-operation
+   
    "e" '(:ignore t :which-key "Eval")
    "eb" 'eval-buffer
    "er" 'eval-region
@@ -404,6 +424,7 @@
 (load-file "~/.emacs.d/bloop.el")
 (load-file "~/.emacs.d/misc_functions.el")
 (load-file "~/.emacs.d/org-settings.el")
+(load-file "~/.emacs.d/alfred-org-capture.el")
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -411,6 +432,9 @@
  ;; If there is more than one, they won't work right.
  '(fci-rule-color "#dedede")
  '(line-spacing 0.2)
+ '(org-agenda-files
+   (quote
+    ("/Volumes/Private/notes/org-roam/daily/2021-03-31.org" "~/Dropbox/org/inbox.org" "~/Dropbox/org/privateJournal.org" "/Volumes/Private/notes/general.bk.org" "/Volumes/Private/notes/general.org" "/Volumes/Private/notes/investing.org" "/Volumes/Private/notes/journal.org" "/Volumes/Private/notes/knowledge.org")))
  '(org-mode-hook
    (quote
     (#[0 "\300\301\302\303\304$\207"
@@ -427,7 +451,7 @@
      org-bullets-mode yas-minor-mode-on evil-org-mode)))
  '(package-selected-packages
    (quote
-    (org-noter neotree pdf-tools stripes md4rd vterm ox-reveal org-re-reveal hackernews org-jira evil-collection ox-jira py-autopep8 python-black org-drill jq-mode chronos rust-mode evil-org deadgrep highlight-symbol org-roam-server org org-roam org-ql poet-theme evil-mc yasnippet-snippets evil-surround yaml-mode ammonite-term-repl company-lsp yasnippet lsp-ui lsp-metals lsp-mode flycheck sbt-mode scala-mode ranger persp-projectile counsel-projectile projectile butler jenkins undo-fu undo-tree swiper-helm counsel spacemacs-theme magit use-package)))
+    (anki-editor exec-path-from-shell ox-slack exwm pamparam org-drill-table yapfify org-noter neotree pdf-tools stripes md4rd vterm ox-reveal org-re-reveal hackernews org-jira evil-collection ox-jira py-autopep8 python-black org-drill jq-mode chronos rust-mode evil-org deadgrep highlight-symbol org-roam-server org org-roam org-ql poet-theme evil-mc yasnippet-snippets evil-surround yaml-mode ammonite-term-repl company-lsp yasnippet lsp-ui lsp-metals lsp-mode flycheck sbt-mode scala-mode ranger persp-projectile counsel-projectile projectile butler jenkins undo-fu undo-tree swiper-helm counsel spacemacs-theme magit use-package)))
  '(show-paren-mode t)
  '(xclip-mode t))
 (custom-set-faces
