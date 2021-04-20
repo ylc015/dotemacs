@@ -3,6 +3,8 @@
 ;; don't show the start up screen
 (setq inhibit-startup-message t)
 
+ 
+
 (require 'package)
 (setq package-archives
       '(("GNU ELPA"     . "https://elpa.gnu.org/packages/")
@@ -113,6 +115,12 @@
 (use-package spacemacs-theme
     :defer t
     :init (load-theme 'spacemacs-dark t))
+
+;; Plantuml ( a UML diagram creator mode )
+;; see for more info https://github.com/skuro/plantuml-mode
+(setq plantuml-jar-path "/Users/peterc/plantuml.jar")
+(setq plantuml-default-exec-mode 'jar)
+(setq plantuml-output-type 'ascii)
 
 
 ;; Which Key
@@ -353,6 +361,7 @@
    "oi" 'org-time-stamp-inactive-with-time
    "oc" 'org-capture
    "od" 'org-roam-dailies-today
+   "or" 'org-roam-db-build-cache
 
    ;; beware that ideally these binding should be left hand only
    "a" '(:ignore t :which-key "Artist Mode")
@@ -379,6 +388,7 @@
    "ar" 'ranger
    "ad" 'deer
    "ay" 'yas-insert-snippet
+   "ak" 'anki-editor-push-notes
 
    "s" '(:ignore t :which-key "Search")
    "sc" 'evil-ex-nohighlight
@@ -392,6 +402,7 @@
    "tr" (lambda () (interactive) (display-line-numbers-mode 'relative))
    "tl" 'toggle-truncate-lines
    "tc" 'xclip-mode 
+   "tol" 'org-toggle-link-display
 
    "T" 'counsel-load-theme
    
@@ -419,6 +430,10 @@
    "nt" 'org-roam-dailies-today
    ))
 
+;; use the PATH variable from bash terminal
+;; not sure why but if this is put at the begin it will error
+(exec-path-from-shell-initialize)
+
 ;; Custom files
 (load-file "~/.emacs.d/scala-metals-init.el")
 (load-file "~/.emacs.d/bloop.el")
@@ -435,6 +450,10 @@
  '(org-agenda-files
    (quote
     ("/Volumes/Private/notes/org-roam/daily/2021-03-31.org" "~/Dropbox/org/inbox.org" "~/Dropbox/org/privateJournal.org" "/Volumes/Private/notes/general.bk.org" "/Volumes/Private/notes/general.org" "/Volumes/Private/notes/investing.org" "/Volumes/Private/notes/journal.org" "/Volumes/Private/notes/knowledge.org")))
+ '(org-format-latex-options
+   (quote
+    (:foreground default :background default :scale 3 :html-foreground "Black" :html-background "Transparent" :html-scale 1.0 :matchers
+		 ("begin" "$1" "$" "$$" "\\(" "\\["))))
  '(org-mode-hook
    (quote
     (#[0 "\300\301\302\303\304$\207"
@@ -451,7 +470,7 @@
      org-bullets-mode yas-minor-mode-on evil-org-mode)))
  '(package-selected-packages
    (quote
-    (anki-editor exec-path-from-shell ox-slack exwm pamparam org-drill-table yapfify org-noter neotree pdf-tools stripes md4rd vterm ox-reveal org-re-reveal hackernews org-jira evil-collection ox-jira py-autopep8 python-black org-drill jq-mode chronos rust-mode evil-org deadgrep highlight-symbol org-roam-server org org-roam org-ql poet-theme evil-mc yasnippet-snippets evil-surround yaml-mode ammonite-term-repl company-lsp yasnippet lsp-ui lsp-metals lsp-mode flycheck sbt-mode scala-mode ranger persp-projectile counsel-projectile projectile butler jenkins undo-fu undo-tree swiper-helm counsel spacemacs-theme magit use-package)))
+    (org-table-sticky-header anki-editor tea-time ggtags eglot org-download hledger-mode plantuml-mode ledger-mode exec-path-from-shell ox-slack exwm pamparam org-drill-table yapfify org-noter neotree pdf-tools stripes md4rd vterm ox-reveal org-re-reveal hackernews org-jira evil-collection ox-jira py-autopep8 python-black org-drill jq-mode chronos rust-mode evil-org deadgrep highlight-symbol org-roam-server org org-roam org-ql poet-theme evil-mc yasnippet-snippets evil-surround yaml-mode ammonite-term-repl company-lsp yasnippet lsp-ui lsp-metals lsp-mode flycheck sbt-mode scala-mode ranger persp-projectile counsel-projectile projectile butler jenkins undo-fu undo-tree swiper-helm counsel spacemacs-theme magit use-package)))
  '(show-paren-mode t)
  '(xclip-mode t))
 (custom-set-faces
@@ -461,3 +480,11 @@
  ;; If there is more than one, they won't work right.
  '(hl-line ((t (:background "#212026")))))
 (put 'upcase-region 'disabled nil)
+
+
+
+
+
+
+
+
