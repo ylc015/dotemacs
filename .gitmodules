@@ -1,0 +1,3 @@
+[submodule "pants.el"]
+	path = pants.el
+	url = https://github.com/fcuny/pants.el.git

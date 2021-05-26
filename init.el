@@ -82,6 +82,10 @@
         (warn "Package %s failed to reinstall" package-name)))))
 
 
+;; Use work python
+(setq python-python-command "/usr/local/bin/twpython3")
+(setq python-shell-interpreter "/usr/local/bin/twpython3")
+
 ;; treat - and _ as part of the word in python mode
 (require 'python)
 (modify-syntax-entry ?_ "w" python-mode-syntax-table)
@@ -111,6 +115,9 @@
 
 ;; Set as a minor mode for Python
 (add-hook 'python-mode-hook '(lambda () (flymake-mode)))
+
+;; Use my own flake8 binary
+(setq flycheck-python-flake8-executable "/Users/peterc/.local/bin/flake8")
 
 (use-package spacemacs-theme
     :defer t
@@ -179,6 +186,35 @@
 ;; Enabled Python mode in aurora configs
 (add-to-list 'auto-mode-alist '("\\.aurora\\'" . python-mode))
 (add-to-list 'auto-mode-alist '("BUILD" . python-mode))
+
+
+;; pants support for emacs https://github.com/fcuny/pants.el
+;; for some reason load-path is not working as expected
+;; we have to manually load pants.el here
+(load-file "pants.el/pants.el")
+(use-package pants
+  :load-path "pants.el/pants.el"
+  :bind (("C-c b" . pants-find-build-file)
+         ("C-c r" . pants-run-binary)
+         ("C-c t" . pants-run-test))
+  :mode (("BUILD\\'" . pants-build-mode))
+  :custom
+  (pants-source-tree-root "/Users/peterc/workspace/source")
+  (pants-bury-compilation-buffer t)
+  (pants-extra-args "-q"))
+
+;; Flycheck integration with mypy. A static type checker in python 
+(require 'flycheck)
+(flycheck-define-checker
+    python-mypy ""
+    :command ("mypy"
+              source-original)
+    :error-patterns
+    ((error line-start (file-name) ":" line ": error:" (message) line-end))
+    :modes python-mode)
+
+(add-to-list 'flycheck-checkers 'python-mypy t)
+(flycheck-add-next-checker 'python-pylint 'python-mypy t)
 
 ;; Sh mode hook
 (add-to-list 'auto-mode-alist '(".bash_alias" . sh-mode))
@@ -389,6 +425,7 @@
    "ad" 'deer
    "ay" 'yas-insert-snippet
    "ak" 'anki-editor-push-notes
+   "ac" 'anki-editor-cloze-region
 
    "s" '(:ignore t :which-key "Search")
    "sc" 'evil-ex-nohighlight
@@ -446,6 +483,9 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(fci-rule-color "#dedede")
+ '(flycheck-checkers
+   (quote
+    (ada-gnat asciidoctor asciidoc c/c++-clang c/c++-gcc c/c++-cppcheck cfengine chef-foodcritic coffee coffee-coffeelint coq css-csslint css-stylelint d-dmd dockerfile-hadolint elixir-dogma emacs-lisp emacs-lisp-checkdoc erlang-rebar3 erlang eruby-erubis fortran-gfortran go-gofmt go-golint go-vet go-build go-test go-errcheck go-unconvert go-megacheck groovy haml handlebars haskell-stack-ghc haskell-ghc haskell-hlint html-tidy javascript-eslint javascript-jshint javascript-jscs javascript-standard json-jsonlint json-python-json less less-stylelint llvm-llc lua-luacheck lua perl perl-perlcritic php php-phpmd php-phpcs processing proselint protobuf-protoc pug puppet-parser puppet-lint python-flake8 r-lintr racket rpm-rpmlint markdown-mdl nix rst-sphinx rst ruby-rubocop ruby-reek ruby-rubylint ruby ruby-jruby rust-cargo rust scala scala-scalastyle scheme-chicken scss-lint scss-stylelint sass/scss-sass-lint sass scss sh-bash sh-posix-dash sh-posix-bash sh-zsh sh-shellcheck slim slim-lint sql-sqlint systemd-analyze tex-chktex tex-lacheck texinfo typescript-tslint verilog-verilator xml-xmlstarlet xml-xmllint yaml-jsyaml yaml-ruby python-mypy)))
  '(line-spacing 0.2)
  '(org-agenda-files
    (quote
@@ -480,11 +520,3 @@
  ;; If there is more than one, they won't work right.
  '(hl-line ((t (:background "#212026")))))
 (put 'upcase-region 'disabled nil)
-
-
-
-
-
-
-
-

@@ -4,6 +4,7 @@
 (add-to-list 'load-path "~/.emacs.d/elpa/org-9.4/org-protocol.el")
 (require 'org-protocol)
 (require 'org-capture)
+(require 'org-roam)
 
 ;; org reveal. a presentation framework
 (setq org-reveal-root "file:///Users/peterc/perm_tmp/node_modules/reveal.js")
@@ -47,6 +48,32 @@
 	:file-name "%<%Y%m%d%H%M%S>-${slug}"
 	:head "#+title: ${title}\n#+ROAM_TAGS: %^{ROAM_TAGS|default}\n\n* definition\n  %^{definition}"
 	:unnarrowed t)
+	("a" "anki" plain (function org-roam--capture-get-point)
+	"%?"
+	:file-name "%<%Y%m%d%H%M%S>-${slug}"
+	:head "#+title: ${title}\n#+CREATED: %T\n\n* definition :%^{TAGS}:\n :PROPERTIES:\n :ANKI_DECK: %^{ANKI_DECK}\n :ANKI_NOTE_TYPE: Basic \n :ANKI_TAGS: %\\1 \n :END:\n** Front\n ${title}\n** Back\n %^{definition}\n\n"
+	:unnarrowed t)
+	("c" "cfa" plain (function org-roam--capture-get-point)
+	"%?"
+	:file-name "%<%Y%m%d%H%M%S>-${slug}"
+	:head "#+title: ${title}\n#+ROAM_TAGS: %^{ROAM_TAGS|CFA:Economics:Finance}\n\n* definition\n  %^{definition}"
+	:unnarrowed t)
+	("q" "cfa-question" plain (function org-roam--capture-get-point)
+	"%?"
+	:file-name "%<%Y%m%d%H%M%S>-${slug}"
+	:head "#+title: ${title}\n#+ROAM_TAGS: %^{ROAM_TAGS|CFA:Economics:Finance}\n\n* definition\n  ${title} %^{definition}
+* %^{Question|What is ${title}?} :Finance:CFA:
+ :PROPERTIES:
+ :ANKI_DECK: CFA
+ :ANKI_NOTE_TYPE: Basic 
+ :ANKI_TAGS: Finance:CFA 
+ :END:
+** Front
+  %\\3
+** Back
+  ${title} %\\2
+"
+	:unnarrowed t)
 	))
 
 
@@ -68,12 +95,14 @@
               (("C-c n I" . org-roam-insert-immediate))
               (("C-c n d" . org-roam-dailies-map))))
 
+
 ;; install org roam server. a visualization of org roam
+;; remember to use a version that works with org-raom
 (use-package org-roam-server
   :ensure t
   :config
   (setq org-roam-server-host "127.0.0.1"
-        org-roam-server-port 8135 ;; unconventional port number to avoid colision
+        org-roam-server-port 8136 ;; unconventional port number to avoid colision
         org-roam-server-authenticate nil
         org-roam-server-export-inline-images t
         org-roam-server-serve-files nil
@@ -149,7 +178,11 @@ PRIORITY may be one of the characters ?A, ?B, or ?C."
 ;; Enable code block for dot, a diagram drawing mode
 (org-babel-do-load-languages
  'org-babel-load-languages
- '((dot . t))) ; this line activates dot
+ '((dot . t)
+   (ledger . t) 
+   (shell . t) 
+   (python . t) 
+   )) ; this line activates dot
 
 ;; org mode custom backend to ignore links when export
 ;;(defun my-ox-jira-link (link desc info) desc)

@@ -48,4 +48,47 @@
   (while (re-search-forward "| d" nil t)
     (replace-match "| " ))
   )
+
+
+(defun peterc/copy-file-name-to-clipboard ()
+  "Copy the current buffer file name to the clipboard."
+  (interactive)
+  (let ((filename (if (equal major-mode 'dired-mode)
+                      default-directory
+                    (buffer-file-name))))
+    (when filename
+      (kill-new filename)
+      (message "Copied buffer file name '%s' to the clipboard." filename))))
 ;;; misc_functions.el ends here
+
+(defun peterc/pin-this-window ()
+  "Prevent this window from changing by other actions."
+  (interactive)
+ (set-window-dedicated-p (selected-window) t )
+  )
+
+;;; arc diff stuff
+(defcustom laa-phab-arc "/opt/twitter_mde/bin/arc"
+  "Phabricator ARC command."
+  :type 'file
+  :group 'laa)
+(defun laa-phab-copy-to-paste (title lang)
+  "Create a paste in phab with TITLE and LANG."
+  (interactive "MTitle:\nMLanguage:")
+  (let ((cmd (concat laa-phab-arc " paste --title=" title (when lang (concat " --lang=" lang)) " --")))
+    (shell-command-on-region (region-beginning) (region-end) cmd)
+    (setq deactivate-mark t)))
+(defun laa-phab-get-paste (id)
+  "Retrieve a paste by ID."
+  (interactive "MId:")
+  (shell-command (concat laa-phab-arc " paste " id " --")))
+
+(defun peterc/toggle-window-dedicated ()
+  "Control whether or not Emacs is allowed to display another buffer in current window."
+  (interactive)
+  (message
+   (if (let (window (get-buffer-window (current-buffer)))
+         (set-window-dedicated-p window (not (window-dedicated-p window))))
+       "%s: Can't touch this!"
+     "%s is up for grabs.")
+   (current-buffer)))
