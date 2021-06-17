@@ -101,20 +101,6 @@
 		(setq evil-shift-width 2)
 		))
 
-;; Configure flymake for Python
-(when (load "flymake" t)
-  (defun flymake-pylint-init ()
-    (let* ((temp-file (flymake-init-create-temp-buffer-copy
-                       'flymake-create-temp-inplace))
-           (local-file (file-relative-name
-                        temp-file
-                        (file-name-directory buffer-file-name))))
-      (list "epylint" (list local-file))))
-  (add-to-list 'flymake-allowed-file-name-masks
-               '("\\.py\\'" flymake-pylint-init)))
-
-;; Set as a minor mode for Python
-(add-hook 'python-mode-hook '(lambda () (flymake-mode)))
 
 ;; Use my own flake8 binary
 (setq flycheck-python-flake8-executable "/Users/peterc/.local/bin/flake8")
@@ -184,24 +170,35 @@
 (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
 
 ;; Enabled Python mode in aurora configs
-(add-to-list 'auto-mode-alist '("\\.aurora\\'" . python-mode))
+(add-to-list 'auto-mode-alist '("\\.aurora\\'" . aurora-config-mode))
 (add-to-list 'auto-mode-alist '("BUILD" . python-mode))
 
 
 ;; pants support for emacs https://github.com/fcuny/pants.el
 ;; for some reason load-path is not working as expected
 ;; we have to manually load pants.el here
-(load-file "pants.el/pants.el")
+(load-file "~/.emacs.d/pants.el/pants.el")
 (use-package pants
   :load-path "pants.el/pants.el"
   :bind (("C-c b" . pants-find-build-file)
-         ("C-c r" . pants-run-binary)
-         ("C-c t" . pants-run-test))
+         ("C-c r" . pants-run-run)
+         ("C-c x" . pants-run-binary)
+         ("C-c t" . pants-run-test)
+         ("C-c f" . pants-run-fmt)
+         ("C-c l" . pants-run-lint)
+         ("C-c m" . pants-run-mypy)
+         ("C-c k" . kill-compilation)
+	 )
   :mode (("BUILD\\'" . pants-build-mode))
   :custom
   (pants-source-tree-root "/Users/peterc/workspace/source")
   (pants-bury-compilation-buffer t)
-  (pants-extra-args "-q"))
+  (pants-extra-args "-q")
+  (pants-completion-system 'ivy))
+
+;; make compilation buffer follows output  
+(setq compilation-scroll-output t)
+;;(setq compilation-scroll-output 'first-error)
 
 ;; Flycheck integration with mypy. A static type checker in python 
 (require 'flycheck)
@@ -254,6 +251,8 @@
   :ensure t)
 (use-package counsel
   :ensure t)
+;; replace all minibuffer completing with ivy-mode
+(ivy-mode 1)
 
 ;; Ranger
 (use-package ranger 
@@ -451,6 +450,7 @@
    "cc" 'evilnc-comment-or-uncomment-lines
    "cm" 'evil-multiedit-match-all
    "cn" 'flycheck-next-error
+   "cj" 'jq-format-json-buffer
    
 
    "g" '(:ignore t :which-key "Git")
